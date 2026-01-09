@@ -293,6 +293,7 @@ nav {
   font-size: 4rem;
   margin-bottom: 1rem;
   text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  color: var(--primary-gold);
 }
 
 .page-hero-content p {

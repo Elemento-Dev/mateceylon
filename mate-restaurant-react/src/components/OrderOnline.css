@@ -2,10 +2,6 @@
     padding: 6rem 0;
     text-align: center;
     background-color: var(--light-gray);
-    background-image: url('/backgroud.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
     color: var(--primary-black);
     position: relative;
 }
@@ -21,7 +17,7 @@
     z-index: 1;
 }
 
-.order-online > * {
+.order-online>* {
     position: relative;
     z-index: 2;
 }
