@@ -1,0 +1,178 @@
+.about-page {
+    background-color: var(--white);
+    padding-bottom: 4rem;
+}
+
+.about-story {
+    padding: 6rem 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.about-story h2 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: var(--primary-gold);
+}
+
+.about-story p {
+    font-size: 1.1rem;
+    color: var(--text-gray);
+    margin-bottom: 1.5rem;
+    font-weight: 300;
+}
+
+/* Mission Grid - Flat Design */
+.about-mission {
+    background-color: var(--primary-black);
+    color: var(--white);
+    padding: 6rem 2rem;
+}
+
+.mission-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 4rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.mission-card {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 3rem;
+    transition: all 0.3s ease;
+}
+
+.mission-card:hover {
+    border-color: var(--primary-gold);
+}
+
+.mission-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--primary-gold);
+}
+
+.mission-card ul {
+    list-style: none;
+    padding: 0;
+}
+
+.mission-card li {
+    margin-bottom: 0.8rem;
+    padding-left: 1.5rem;
+    position: relative;
+    opacity: 0.85;
+}
+
+.mission-card li::before {
+    content: "•";
+    color: var(--primary-gold);
+    position: absolute;
+    left: 0;
+}
+
+/* Team Section */
+.about-team {
+    padding: 6rem 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.about-team h2 {
+    font-size: 3rem;
+    margin-bottom: 4rem;
+}
+
+.chefs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 3rem;
+}
+
+.chef-card {
+    text-align: left;
+}
+
+.chef-image {
+    width: 100%;
+    height: 400px;
+    background-size: cover;
+    background-position: center;
+    margin-bottom: 1.5rem;
+    filter: grayscale(100%);
+    /* Premium B&W look */
+    transition: filter 0.4s ease;
+}
+
+.chef-card:hover .chef-image {
+    filter: grayscale(0%);
+}
+
+.chef-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.chef-role {
+    color: var(--primary-gold);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.8rem;
+    margin-bottom: 1rem;
+}
+
+.chef-bio {
+    color: var(--text-gray);
+    font-size: 0.95rem;
+}
+
+/* Timeline */
+.about-timeline {
+    background-color: #f9f9f9;
+    padding: 6rem 2rem;
+}
+
+.about-timeline h2 {
+    text-align: center;
+    font-size: 3rem;
+    margin-bottom: 4rem;
+}
+
+.timeline {
+    max-width: 800px;
+    margin: 0 auto;
+    border-left: 1px solid var(--primary-gold);
+    padding-left: 3rem;
+}
+
+.timeline-item {
+    margin-bottom: 4rem;
+    position: relative;
+}
+
+.timeline-item::before {
+    content: "";
+    position: absolute;
+    left: -3.4rem;
+    top: 5px;
+    width: 12px;
+    height: 12px;
+    background-color: var(--primary-gold);
+    border-radius: 50%;
+}
+
+.timeline-year {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--primary-gold);
+    margin-bottom: 0.5rem;
+}
+
+.timeline-content h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}

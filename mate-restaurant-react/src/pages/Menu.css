@@ -1,0 +1,116 @@
+.menu-page {
+    background-color: var(--white);
+    min-height: 100vh;
+}
+
+.menu-content {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 6rem 2rem;
+}
+
+.menu-categories {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-bottom: 5rem;
+    flex-wrap: wrap;
+}
+
+.category-btn {
+    background: transparent;
+    border: none;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--text-gray);
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid transparent;
+    transition: all 0.4s ease;
+}
+
+.category-btn.active,
+.category-btn:hover {
+    color: var(--primary-gold);
+    border-color: var(--primary-gold);
+}
+
+.menu-items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 5rem 3rem;
+}
+
+.menu-item-card {
+    text-align: left;
+    box-shadow: none !important;
+    /* Force flat */
+    background: transparent;
+    /* Clean flat design - no borders or shadows on the card itself */
+}
+
+.menu-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.8rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    /* Subtle divider */
+}
+
+.menu-item-header h3 {
+    font-size: 1.3rem;
+    color: var(--primary-black);
+    letter-spacing: 1px;
+}
+
+.menu-item-header .price {
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    color: var(--primary-gold);
+    font-size: 1.1rem;
+}
+
+.menu-item-card .description {
+    color: var(--text-gray);
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.menu-item-badges {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.badge {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 0.2rem 0.6rem;
+    border-radius: 2px;
+    font-weight: 700;
+}
+
+.badge.vegetarian {
+    border: 1px solid #4caf50;
+    color: #4caf50;
+}
+
+.badge.special {
+    background-color: var(--primary-gold);
+    color: var(--white);
+}
+
+.menu-note {
+    text-align: center;
+    margin-top: 6rem;
+    color: #888;
+    font-size: 0.9rem;
+    font-style: italic;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    padding-top: 2rem;
+}

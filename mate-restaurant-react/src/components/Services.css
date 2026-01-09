@@ -1,0 +1,10 @@
+/* Services specific overrides */
+.services {
+    padding: 0 !important;
+    background: var(--white);
+}
+
+.services .container {
+    max-width: none;
+    padding: 0;
+}
