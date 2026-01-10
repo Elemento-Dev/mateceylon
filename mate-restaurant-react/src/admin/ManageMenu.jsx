@@ -1,0 +1,242 @@
+import React, { useState } from 'react';
+import { useFirestore } from '../hooks/useFirestore';
+import { Link } from 'react-router-dom';
+import AdminLayout from './components/AdminLayout';
+import './Admin.css';
+
+function ManageMenu() {
+    const { data: menuItems, loading, addDocument, deleteDocument, updateDocument } = useFirestore('menu_items');
+    const [formData, setFormData] = useState({
+        name: '',
+        description: '',
+        price: '',
+        category: 'mains',
+        isVegetarian: false,
+        isSpecial: false
+    });
+    const [isEditing, setIsEditing] = useState(false);
+    const [editId, setEditId] = useState(null);
+
+    const categories = [
+        { id: 'appetizers', name: 'Appetizers' },
+        { id: 'mains', name: 'Main Courses' },
+        { id: 'bbq', name: 'BBQ Specialties' },
+        { id: 'desserts', name: 'Desserts' },
+        { id: 'beverages', name: 'Beverages' },
+    ];
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            if (isEditing) {
+                await updateDocument(editId, formData);
+                setIsEditing(false);
+                setEditId(null);
+            } else {
+                await addDocument(formData);
+            }
+            setFormData({
+                name: '',
+                description: '',
+                price: '',
+                category: 'mains',
+                isVegetarian: false,
+                isSpecial: false
+            });
+            alert('Menu item saved successfully!');
+        } catch (error) {
+            console.error("Error saving menu item:", error);
+            alert('Failed to save menu item.');
+        }
+    };
+
+    const handleDelete = async (id) => {
+        if (window.confirm('Are you sure you want to delete this item?')) {
+            try {
+                await deleteDocument(id);
+            } catch (error) {
+                console.error("Error deleting item:", error);
+            }
+        }
+    };
+
+    const handleEdit = (item) => {
+        setFormData({
+            name: item.name,
+            description: item.description,
+            price: item.price,
+            category: item.category,
+            isVegetarian: item.isVegetarian || false,
+            isSpecial: item.isSpecial || false
+        });
+        setIsEditing(true);
+        setEditId(item.id);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    if (loading) return <div style={{ padding: '2rem', color: 'white' }}>Loading menu items...</div>;
+
+    return (
+        <AdminLayout title="Manage Menu Items" subtitle="Add, edit, or remove dishes from your menu">
+
+            {/* Add/Edit Form */}
+            <div className="admin-form">
+                <h3 className="section-title">{isEditing ? 'Edit Item' : 'Add New Item'}</h3>
+                <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+                    <div className="form-group" style={{ gridColumn: '1 / -1' }}>
+                        <label>Name</label>
+                        <input
+                            type="text"
+                            required
+                            className="form-control"
+                            value={formData.name}
+                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        />
+                    </div>
+
+                    <div className="form-group" style={{ gridColumn: '1 / -1' }}>
+                        <label>Description</label>
+                        <textarea
+                            required
+                            className="form-control"
+                            value={formData.description}
+                            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                            style={{ height: '80px', resize: 'vertical' }}
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Price (e.g. Rs. 850)</label>
+                        <input
+                            type="text"
+                            required
+                            className="form-control"
+                            value={formData.price}
+                            onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Category</label>
+                        <select
+                            className="form-control"
+                            value={formData.category}
+                            onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                        >
+                            {categories.map(cat => (
+                                <option key={cat.id} value={cat.id}>{cat.name}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="form-group" style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
+                        <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', color: '#fff' }}>
+                            <input
+                                type="checkbox"
+                                checked={formData.isVegetarian}
+                                onChange={(e) => setFormData({ ...formData, isVegetarian: e.target.checked })}
+                                style={{ marginRight: '0.5rem', width: '20px', height: '20px' }}
+                            />
+                            Vegetarian
+                        </label>
+                        <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', color: '#fff' }}>
+                            <input
+                                type="checkbox"
+                                checked={formData.isSpecial}
+                                onChange={(e) => setFormData({ ...formData, isSpecial: e.target.checked })}
+                                style={{ marginRight: '0.5rem', width: '20px', height: '20px' }}
+                            />
+                            Chef's Special
+                        </label>
+                    </div>
+
+                    <div style={{ gridColumn: '1 / -1', marginTop: '1rem' }}>
+                        <button type="submit" className="btn-primary" style={{ marginRight: '1rem' }}>
+                            {isEditing ? 'Update Item' : 'Add Item'}
+                        </button>
+                        {isEditing && (
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setIsEditing(false);
+                                    setFormData({
+                                        name: '',
+                                        description: '',
+                                        price: '',
+                                        category: 'mains',
+                                        isVegetarian: false,
+                                        isSpecial: false
+                                    });
+                                }}
+                                style={{
+                                    padding: '0.8rem 2rem',
+                                    backgroundColor: '#444',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '8px',
+                                    cursor: 'pointer',
+                                    fontWeight: 'bold',
+                                    textTransform: 'uppercase'
+                                }}
+                            >
+                                Cancel
+                            </button>
+                        )}
+                    </div>
+                </form>
+            </div>
+
+            {/* List View */}
+            <div className="admin-table-container">
+                <h3 className="section-title">Existing Items</h3>
+                <table className="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {menuItems.map(item => (
+                            <tr key={item.id}>
+                                <td>
+                                    <div style={{ fontWeight: 'bold', fontSize: '1.1rem', color: '#fff' }}>{item.name}</div>
+                                    <div style={{ fontSize: '0.9rem', color: '#888' }}>{item.description}</div>
+                                    <div style={{ marginTop: '0.5rem' }}>
+                                        {item.isVegetarian && <span style={{ backgroundColor: '#065f46', color: '#d1fae5', fontSize: '0.75rem', padding: '4px 8px', borderRadius: '4px', marginRight: '5px' }}>Veg</span>}
+                                        {item.isSpecial && <span style={{ backgroundColor: '#92400e', color: '#fef3c7', fontSize: '0.75rem', padding: '4px 8px', borderRadius: '4px' }}>Special</span>}
+                                    </div>
+                                </td>
+                                <td style={{ textTransform: 'capitalize' }}>{item.category}</td>
+                                <td>{item.price}</td>
+                                <td>
+                                    <button
+                                        onClick={() => handleEdit(item)}
+                                        style={{ marginRight: '1rem', border: 'none', background: 'none', color: '#cd9f2b', cursor: 'pointer', fontWeight: 'bold' }}
+                                    >
+                                        Edit
+                                    </button>
+                                    <button
+                                        onClick={() => handleDelete(item.id)}
+                                        className="btn-danger"
+                                    >
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                        {menuItems.length === 0 && (
+                            <tr>
+                                <td colSpan="4" style={{ padding: '2rem', textAlign: 'center', color: '#888' }}>No menu items found. Add one above!</td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
+        </AdminLayout>
+    );
+}
+
+export default ManageMenu;
