@@ -25,7 +25,7 @@ function Navigation() {
             </Link>
           </div>
 
-          <Link to="/contact" className="nav-cta">
+          <Link to="/reservation" className="nav-cta">
             MAKE A RESERVATION
           </Link>
         </div>
@@ -40,6 +40,7 @@ function Navigation() {
           <Link to="/services" onClick={toggleMenu}>SERVICES</Link>
           <Link to="/gallery" onClick={toggleMenu}>GALLERY</Link>
           <Link to="/about" onClick={toggleMenu}>ABOUT</Link>
+          <Link to="/reservation" onClick={toggleMenu}>RESERVATION</Link>
         </div>
       </div>
     </>

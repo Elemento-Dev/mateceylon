@@ -19,6 +19,8 @@ const Dashboard = lazy(() => import('./admin/Dashboard'));
 const ManageMenu = lazy(() => import('./admin/ManageMenu'));
 const ManageGallery = lazy(() => import('./admin/ManageGallery'));
 const ManageServices = lazy(() => import('./admin/ManageServices'));
+const ManageReservations = lazy(() => import('./admin/ManageReservations'));
+const Reservation = lazy(() => import('./pages/Reservation'));
 
 import { useLocation } from 'react-router-dom';
 
@@ -52,6 +54,7 @@ function App() {
               <Route path="/services" element={<ServicesPage />} />
               <Route path="/gallery" element={<Gallery />} />
               <Route path="/about" element={<About />} />
+              <Route path="/reservation" element={<Reservation />} />
               <Route path="/contact" element={<Contact />} />
 
               {/* Admin Routes */}
@@ -74,6 +77,11 @@ function App() {
               <Route path="/admin/services" element={
                 <PrivateRoute>
                   <ManageServices />
+                </PrivateRoute>
+              } />
+              <Route path="/admin/reservations" element={
+                <PrivateRoute>
+                  <ManageReservations />
                 </PrivateRoute>
               } />
             </Routes>

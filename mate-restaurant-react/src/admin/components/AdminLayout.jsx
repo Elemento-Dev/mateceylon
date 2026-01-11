@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { FiHome, FiGrid, FiImage, FiLayers, FiLogOut } from 'react-icons/fi';
+import { FiHome, FiGrid, FiImage, FiLayers, FiLogOut, FiCalendar } from 'react-icons/fi';
 import '../Admin.css';
 
 function AdminLayout({ children, title, subtitle }) {
@@ -44,6 +44,11 @@ function AdminLayout({ children, title, subtitle }) {
                         <li>
                             <Link to="/admin/services" className={`admin-nav-link ${isActive('/admin/services')}`}>
                                 <FiLayers className="nav-icon" /> Manage Services
+                            </Link>
+                        </li>
+                        <li>
+                            <Link to="/admin/reservations" className={`admin-nav-link ${isActive('/admin/reservations')}`}>
+                                <FiCalendar className="nav-icon" /> Manage Reservations
                             </Link>
                         </li>
                     </ul>

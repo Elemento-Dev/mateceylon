@@ -501,6 +501,46 @@
   padding: 0.2rem;
 }
 
-.btn-remove:hover {
-  color: #dc2626;
+
+/* Status Badges */
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.status-badge.pending {
+  background-color: rgba(255, 152, 0, 0.2);
+  color: #ff9800;
+}
+
+.status-badge.approved {
+  background-color: rgba(76, 175, 80, 0.2);
+  color: #4caf50;
+}
+
+.status-badge.declined {
+  background-color: rgba(244, 67, 54, 0.2);
+  color: #f44336;
+}
+
+/* Filter Buttons */
+.filter-btn {
+  background: transparent;
+  border: 1px solid var(--admin-border);
+  color: #888;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+  background-color: var(--admin-accent);
+  color: #000;
+  border-color: var(--admin-accent);
+  font-weight: bold;
 }
