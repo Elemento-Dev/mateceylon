@@ -64,11 +64,11 @@ const Hero = () => {
                 <div className="hero-overlay"></div>
             </div>
             <div className="hero-content">
-                <h1>Mate Restaurant</h1>
-                <p className="subtitle">EXPERIENCE THE EXCEPTIONAL</p>
+                <h1>Mate Sri Lanka</h1>
+                <p className="subtitle">EXPERIENCE EXCEPTIONAL AUSTRALIAN FUSION</p>
                 <div className="cta-wrapper">
                     <a href="/menu" className="btn-link" style={{ color: '#fff', borderBottomColor: '#fff' }}>
-                        VIEW MENUS
+                        VIEW MENU
                     </a>
                 </div>
             </div>
