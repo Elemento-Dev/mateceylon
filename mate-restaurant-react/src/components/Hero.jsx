@@ -1,11 +1,19 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './Hero.css';
 
 const Hero = () => {
     const playerRef = useRef(null);
     const intervalRef = useRef(null);
+    const [videoError, setVideoError] = useState(false);
 
     useEffect(() => {
+        // Timeout to check if video failed to load (e.g. 5 seconds)
+        const loadTimeout = setTimeout(() => {
+            if (!playerRef.current) {
+                setVideoError(true);
+            }
+        }, 5000);
+
         // Load YouTube IFrame API
         const tag = document.createElement('script');
         tag.src = 'https://www.youtube.com/iframe_api';
@@ -45,12 +53,16 @@ const Hero = () => {
                             event.target.seekTo(9);
                             event.target.playVideo();
                         }
+                    },
+                    onError: () => {
+                        setVideoError(true);
                     }
                 }
             });
         };
 
         return () => {
+            clearTimeout(loadTimeout);
             if (intervalRef.current) {
                 clearInterval(intervalRef.current);
             }
@@ -60,7 +72,23 @@ const Hero = () => {
     return (
         <div className="hero">
             <div className="hero-video-container">
-                <div id="hero-video" className="hero-video"></div>
+                {videoError ? (
+                    <div
+                        className="hero-fallback-image"
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            width: '100%',
+                            height: '100%',
+                            backgroundImage: 'url("https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=1920&q=80")',
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center'
+                        }}
+                    ></div>
+                ) : (
+                    <div id="hero-video" className="hero-video"></div>
+                )}
                 <div className="hero-overlay"></div>
             </div>
             <div className="hero-content">

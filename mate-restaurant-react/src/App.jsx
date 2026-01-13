@@ -5,6 +5,7 @@ import ScrollToTop from './components/ScrollToTop';
 import Footer from './components/Footer';
 import { AuthProvider } from './context/AuthContext';
 import PrivateRoute from './components/PrivateRoute';
+import EventPopup from './components/EventPopup';
 // import SmoothScroll from './components/SmoothScroll'; // REMOVED: Causing lag
 
 // Lazy load pages for performance
@@ -19,7 +20,9 @@ const Dashboard = lazy(() => import('./admin/Dashboard'));
 const ManageMenu = lazy(() => import('./admin/ManageMenu'));
 const ManageGallery = lazy(() => import('./admin/ManageGallery'));
 const ManageServices = lazy(() => import('./admin/ManageServices'));
+
 const ManageReservations = lazy(() => import('./admin/ManageReservations'));
+const ManageEvents = lazy(() => import('./admin/ManageEvents'));
 const Reservation = lazy(() => import('./pages/Reservation'));
 
 import { useLocation } from 'react-router-dom';
@@ -32,6 +35,7 @@ function Layout({ children }) {
     <>
       <ScrollToTop />
       {!isAdmin && <Navigation />}
+      <EventPopup />
       {children}
       {!isAdmin && <Footer />}
     </>
@@ -82,6 +86,11 @@ function App() {
               <Route path="/admin/reservations" element={
                 <PrivateRoute>
                   <ManageReservations />
+                </PrivateRoute>
+              } />
+              <Route path="/admin/events" element={
+                <PrivateRoute>
+                  <ManageEvents />
                 </PrivateRoute>
               } />
             </Routes>

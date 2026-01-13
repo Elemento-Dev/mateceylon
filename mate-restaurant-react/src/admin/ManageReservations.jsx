@@ -7,6 +7,15 @@ const ManageReservations = () => {
     const [reservations, setReservations] = useState([]);
     const [loading, setLoading] = useState(true);
     const [filter, setFilter] = useState('all'); // 'all', 'pending', 'approved', 'declined'
+    const [showCreateModal, setShowCreateModal] = useState(false);
+    const [newReservation, setNewReservation] = useState({
+        name: '',
+        phone: '',
+        email: '',
+        date: '',
+        time: '',
+        guests: 2
+    });
 
     useEffect(() => {
         fetchReservations();
@@ -40,6 +49,20 @@ const ManageReservations = () => {
         }
     };
 
+    const handleCreateSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const res = await reservationService.createReservation(newReservation);
+            setReservations([res, ...reservations]);
+            setShowCreateModal(false);
+            setNewReservation({ name: '', phone: '', email: '', date: '', time: '', guests: 2 });
+            alert("Reservation created successfully!");
+        } catch (error) {
+            console.error("Create failed:", error);
+            alert("Failed to create reservation");
+        }
+    };
+
     const filteredReservations = reservations.filter(res => {
         if (filter === 'all') return true;
         return res.status === filter;
@@ -49,12 +72,92 @@ const ManageReservations = () => {
 
     return (
         <AdminLayout title="Manage Reservations" subtitle="View and manage table bookings">
-            <div className="admin-actions" style={{ marginBottom: '2rem', display: 'flex', gap: '1rem' }}>
-                <button onClick={() => setFilter('all')} className={`filter-btn ${filter === 'all' ? 'active' : ''}`}>All</button>
-                <button onClick={() => setFilter('pending')} className={`filter-btn ${filter === 'pending' ? 'active' : ''}`}>Pending</button>
-                <button onClick={() => setFilter('approved')} className={`filter-btn ${filter === 'approved' ? 'active' : ''}`}>Approved</button>
-                <button onClick={() => setFilter('declined')} className={`filter-btn ${filter === 'declined' ? 'active' : ''}`}>Declined</button>
+            <div className="admin-actions" style={{ marginBottom: '2rem', display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'space-between' }}>
+                <div style={{ display: 'flex', gap: '1rem' }}>
+                    <button onClick={() => setFilter('all')} className={`filter-btn ${filter === 'all' ? 'active' : ''}`}>All</button>
+                    <button onClick={() => setFilter('pending')} className={`filter-btn ${filter === 'pending' ? 'active' : ''}`}>Pending</button>
+                    <button onClick={() => setFilter('approved')} className={`filter-btn ${filter === 'approved' ? 'active' : ''}`}>Approved</button>
+                    <button onClick={() => setFilter('declined')} className={`filter-btn ${filter === 'declined' ? 'active' : ''}`}>Declined</button>
+                </div>
+                <button onClick={() => setShowCreateModal(true)} className="btn-primary" style={{ padding: '0.5rem 1rem' }}>
+                    + New Reservation
+                </button>
             </div>
+
+            {/* Create Reservation Modal */}
+            {showCreateModal && (
+                <div className="modal-overlay" style={{
+                    position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+                    backgroundColor: 'rgba(0,0,0,0.8)', zIndex: 1000,
+                    display: 'flex', justifyContent: 'center', alignItems: 'center'
+                }}>
+                    <div className="modal-content" style={{
+                        background: '#1a1a1a', padding: '2rem', borderRadius: '8px',
+                        border: '1px solid #cd9f2b', width: '90%', maxWidth: '500px'
+                    }}>
+                        <h3 style={{ color: '#cd9f2b', marginBottom: '1.5rem' }}>Manual Reservation</h3>
+                        <form onSubmit={handleCreateSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                            <input
+                                type="text"
+                                placeholder="Guest Name"
+                                required
+                                className="form-control"
+                                value={newReservation.name}
+                                onChange={(e) => setNewReservation({ ...newReservation, name: e.target.value })}
+                            />
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                                <input
+                                    type="tel"
+                                    placeholder="Phone"
+                                    required
+                                    className="form-control"
+                                    value={newReservation.phone}
+                                    onChange={(e) => setNewReservation({ ...newReservation, phone: e.target.value })}
+                                />
+                                <input
+                                    type="email"
+                                    placeholder="Email (Optional)"
+                                    className="form-control"
+                                    value={newReservation.email}
+                                    onChange={(e) => setNewReservation({ ...newReservation, email: e.target.value })}
+                                />
+                            </div>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                                <input
+                                    type="date"
+                                    required
+                                    className="form-control"
+                                    value={newReservation.date}
+                                    onChange={(e) => setNewReservation({ ...newReservation, date: e.target.value })}
+                                />
+                                <input
+                                    type="time"
+                                    required
+                                    className="form-control"
+                                    value={newReservation.time}
+                                    onChange={(e) => setNewReservation({ ...newReservation, time: e.target.value })}
+                                />
+                            </div>
+                            <input
+                                type="number"
+                                placeholder="Guests"
+                                min="1"
+                                required
+                                className="form-control"
+                                value={newReservation.guests}
+                                onChange={(e) => setNewReservation({ ...newReservation, guests: parseInt(e.target.value) })}
+                            />
+                            <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+                                <button type="submit" className="btn-primary" style={{ flex: 1 }}>Create</button>
+                                <button type="button" onClick={() => setShowCreateModal(false)} style={{
+                                    flex: 1, padding: '0.8rem', background: '#333', color: 'white',
+                                    border: 'none', borderRadius: '4px', cursor: 'pointer'
+                                }}>Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
 
             <div className="admin-table-container">
                 <table className="admin-table">

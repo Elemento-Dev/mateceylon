@@ -7,6 +7,7 @@ import './Admin.css';
 
 function ManageMenu() {
     const { data: menuItems, loading, addDocument, deleteDocument, updateDocument } = useFirestore('menu_items');
+    const { data: categories, addDocument: addCategory, deleteDocument: deleteCategory } = useFirestore('menu_categories');
     const { uploadFile, deleteFile } = useStorage();
     const [formData, setFormData] = useState({
         name: '',
@@ -21,13 +22,14 @@ function ManageMenu() {
     const [file, setFile] = useState(null);
     const [uploading, setUploading] = useState(false);
 
-    const categories = [
-        { id: 'appetizers', name: 'Appetizers' },
-        { id: 'mains', name: 'Main Courses' },
-        { id: 'bbq', name: 'BBQ Specialties' },
-        { id: 'desserts', name: 'Desserts' },
-        { id: 'beverages', name: 'Beverages' },
-    ];
+    // Category Management State
+    const [showCategoryModal, setShowCategoryModal] = useState(false);
+    const [newCategoryName, setNewCategoryName] = useState('');
+
+    // Sort categories or default if empty (though we expect them to be managed)
+    const sortedCategories = categories ? [...categories].sort((a, b) => a.name.localeCompare(b.name)) : [];
+
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -79,6 +81,31 @@ function ManageMenu() {
         }
     };
 
+    const handleAddCategory = async (e) => {
+        e.preventDefault();
+        if (!newCategoryName.trim()) return;
+        try {
+            await addCategory({
+                name: newCategoryName,
+                id: newCategoryName.toLowerCase().replace(/\s+/g, '_') // create an ID from name
+            });
+            setNewCategoryName('');
+        } catch (error) {
+            console.error("Error adding category:", error);
+            alert("Failed to add category");
+        }
+    };
+
+    const handleDeleteCategory = async (id) => {
+        if (window.confirm('Delete this category?')) {
+            try {
+                await deleteCategory(id);
+            } catch (error) {
+                console.error("Error deleting category:", error);
+            }
+        }
+    };
+
     const handleEdit = (item) => {
         setFormData({
             name: item.name,
@@ -101,6 +128,51 @@ function ManageMenu() {
 
     return (
         <AdminLayout title="Manage Menu Items" subtitle="Add, edit, or remove dishes from your menu">
+
+            <div style={{ textAlign: 'right', marginBottom: '1rem' }}>
+                <button onClick={() => setShowCategoryModal(true)} style={{ background: 'transparent', border: '1px solid #cd9f2b', color: '#cd9f2b', padding: '0.5rem 1rem', borderRadius: '4px', cursor: 'pointer' }}>
+                    Manage Categories
+                </button>
+            </div>
+
+            {/* Category Modal */}
+            {showCategoryModal && (
+                <div className="modal-overlay" style={{
+                    position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+                    backgroundColor: 'rgba(0,0,0,0.8)', zIndex: 1000,
+                    display: 'flex', justifyContent: 'center', alignItems: 'center'
+                }}>
+                    <div className="modal-content" style={{
+                        background: '#1a1a1a', padding: '2rem', borderRadius: '8px',
+                        border: '1px solid #cd9f2b', width: '90%', maxWidth: '400px'
+                    }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                            <h3 style={{ color: '#cd9f2b', margin: 0 }}>Menu Categories</h3>
+                            <button onClick={() => setShowCategoryModal(false)} style={{ background: 'none', border: 'none', color: 'white', fontSize: '1.5rem', cursor: 'pointer' }}>&times;</button>
+                        </div>
+
+                        <div style={{ marginBottom: '1.5rem', display: 'flex', gap: '0.5rem' }}>
+                            <input
+                                type="text"
+                                placeholder="New Category Name"
+                                className="form-control"
+                                value={newCategoryName}
+                                onChange={(e) => setNewCategoryName(e.target.value)}
+                            />
+                            <button onClick={handleAddCategory} className="btn-primary" style={{ padding: '0 1rem' }}>Add</button>
+                        </div>
+
+                        <ul style={{ listStyle: 'none', padding: 0, maxHeight: '300px', overflowY: 'auto' }}>
+                            {sortedCategories.map(cat => (
+                                <li key={cat.id} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem', borderBottom: '1px solid #333' }}>
+                                    <span>{cat.name}</span>
+                                    <button onClick={() => handleDeleteCategory(cat.id)} style={{ color: '#ff4444', background: 'none', border: 'none', cursor: 'pointer' }}>Delete</button>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+            )}
 
             {/* Add/Edit Form */}
             <div className="admin-form">
@@ -146,7 +218,7 @@ function ManageMenu() {
                             value={formData.category}
                             onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                         >
-                            {categories.map(cat => (
+                            {sortedCategories.map(cat => (
                                 <option key={cat.id} value={cat.id}>{cat.name}</option>
                             ))}
                         </select>

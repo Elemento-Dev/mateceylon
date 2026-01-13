@@ -32,6 +32,11 @@ function AdminLayout({ children, title, subtitle }) {
                             </Link>
                         </li>
                         <li>
+                            <Link to="/admin/events" className={`admin-nav-link ${isActive('/admin/events')}`}>
+                                <FiCalendar className="nav-icon" /> Manage Events
+                            </Link>
+                        </li>
+                        <li>
                             <Link to="/admin/menu" className={`admin-nav-link ${isActive('/admin/menu')}`}>
                                 <FiGrid className="nav-icon" /> Manage Menu
                             </Link>
